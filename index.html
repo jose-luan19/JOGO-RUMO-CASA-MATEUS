@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+      <meta charset="UTF-8">
+      <title>Rumo à Casa do Mateus</title>
+      <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+      <h1>🏡 Rumo à Casa do Mateus</h1>
+      <p>Use ⬅️ ➡️ para se mover</p>
+
+      <canvas id="game" width="700" height="250" tabindex="0"></canvas>
+
+
+
+      <div id="questionBox" class="hidden">
+            <p id="question"></p>
+            <div class="answerBox">
+                  <input type="number" id="answerInput" placeholder="Resposta">
+                  <button onclick="checkAnswer()">Responder</button>
+            </div>
+            <p id="feedback"></p>
+      </div>
+
+      <script src="script.js"></script>
+</body>
+
+</html>

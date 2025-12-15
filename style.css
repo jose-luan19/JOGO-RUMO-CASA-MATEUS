@@ -33,3 +33,15 @@ canvas {
       position: relative;
       top: 95px;
 }
+
+#mobileControls {
+  display: none;
+  margin-top: 10px;
+}
+
+#mobileControls button {
+  font-size: 28px;
+  padding: 15px 30px;
+  margin: 0 10px;
+  border-radius: 10px;
+}

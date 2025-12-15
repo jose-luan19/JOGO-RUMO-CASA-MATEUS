@@ -36,19 +36,50 @@ const npc = {
       size: 25
 };
 
-canvas.addEventListener("keydown", e => {
-      keys[e.key] = true;
-});
 
-canvas.addEventListener("keyup", e => {
-      keys[e.key] = false;
-});
 answerInput.addEventListener("keydown", e => {
       if (e.key === "Enter" && questionActive) {
             e.preventDefault();
             checkAnswer();
       }
 });
+
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+document.getElementById("mobileControls").style.display = "block";
+
+window.addEventListener("keydown", e => {
+  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault(); // mata scroll
+    keys[e.key] = true;
+  }
+});
+
+window.addEventListener("keyup", e => {
+  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+    keys[e.key] = false;
+  }
+});
+
+function bindButton(btn, key) {
+  // Desktop (mouse)
+  btn.addEventListener("mousedown", () => keys[key] = true);
+  btn.addEventListener("mouseup", () => keys[key] = false);
+  btn.addEventListener("mouseleave", () => keys[key] = false);
+
+  // Mobile (toque)
+  btn.addEventListener("touchstart", e => {
+    e.preventDefault();
+    keys[key] = true;
+  });
+
+  btn.addEventListener("touchend", () => keys[key] = false);
+}
+
+bindButton(leftBtn, "ArrowLeft");
+bindButton(rightBtn, "ArrowRight");
+
 
 function update() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);

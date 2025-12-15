@@ -33,18 +33,51 @@ var npc = {
   y: 180,
   size: 25
 };
-canvas.addEventListener("keydown", function (e) {
-  keys[e.key] = true;
-});
-canvas.addEventListener("keyup", function (e) {
-  keys[e.key] = false;
-});
 answerInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && questionActive) {
     e.preventDefault();
     checkAnswer();
   }
 });
+var leftBtn = document.getElementById("leftBtn");
+var rightBtn = document.getElementById("rightBtn");
+document.getElementById("mobileControls").style.display = "block";
+window.addEventListener("keydown", function (e) {
+  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault(); // mata scroll
+
+    keys[e.key] = true;
+  }
+});
+window.addEventListener("keyup", function (e) {
+  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+    keys[e.key] = false;
+  }
+});
+
+function bindButton(btn, key) {
+  // Desktop (mouse)
+  btn.addEventListener("mousedown", function () {
+    return keys[key] = true;
+  });
+  btn.addEventListener("mouseup", function () {
+    return keys[key] = false;
+  });
+  btn.addEventListener("mouseleave", function () {
+    return keys[key] = false;
+  }); // Mobile (toque)
+
+  btn.addEventListener("touchstart", function (e) {
+    e.preventDefault();
+    keys[key] = true;
+  });
+  btn.addEventListener("touchend", function () {
+    return keys[key] = false;
+  });
+}
+
+bindButton(leftBtn, "ArrowLeft");
+bindButton(rightBtn, "ArrowRight");
 
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);

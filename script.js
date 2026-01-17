@@ -10,27 +10,37 @@ const CONFETTI_COUNT = 120;
 // ===== PERGUNTAS =====
 const levels = [
       {
-            title: "Nível 1 – O encontro dos amigos",
+            title: "Nível 1 – O encontro dos amigos (As Figurinhas).",
+            label: "Adição de Parcelas Iguais",
+            dica: "Adição de Parcelas Iguais",
             question: "Somos 4 amigos com 3 figurinhas cada. \nQuantas figurinhas teremos juntos?",
             answer: 12
       },
       {
             title: "Nível 2 – O caminho até o parque",
+            label: "Nível 2 – O caminho até o parque",
+            dica: "Adição de Parcelas Iguais",
             question: "Há 2 postes em cada quarteirão e eles passaram por 4 quarteirões. \nQuantos postes?",
             answer: 8
       },
       {
             title: "Nível 3 – Os bancos do parque",
+            label: "Nível 3 – Os bancos do parque",
+            dica: "Adição de Parcelas Iguais",
             question: "São 3 espaços com 4 bancos em cada um. \nQuantos bancos ao todo?",
             answer: 12
       },
       {
             title: "Nível 4 – As telhas das casas",
+            label: "Nível 4 – As telhas das casas",
+            dica: "Adição de Parcelas Iguais",
             question: "Um muro tem 3 linhas com 5 telhas em cada linha. \nQuantas telhas há no total?",
             answer: 15
       },
       {
             title: "Nível 5 – A festa do Mateus 🎉",
+            label: "Nível 5 – A festa do Mateus 🎉",
+            dica: "Adição de Parcelas Iguais",
             question: "Há 4 mesas com 3 copinhos em cada uma. Quantos copinhos há ao todo?",
             answer: 12
       }

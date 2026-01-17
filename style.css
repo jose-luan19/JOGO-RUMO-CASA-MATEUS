@@ -28,7 +28,6 @@ canvas {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 10px;
 }
 
 #mobileControls {
@@ -74,6 +73,7 @@ canvas {
 #question {
       height: 50px;
       width: calc(100% - 1px);
+      margin-bottom: 12px;
 }
 
 #answerInput::-webkit-inner-spin-button,

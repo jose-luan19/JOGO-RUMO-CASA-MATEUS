@@ -3,22 +3,48 @@ let gameFinished = false;
 const canvas = document.getElementById("game");
 canvas.focus();
 const ctx = canvas.getContext("2d");
+const confetti = [];
+const CONFETTI_COUNT = 120;
 
 
+// ===== PERGUNTAS =====
+const levels = [
+      {
+            title: "Nível 1 – O encontro dos amigos",
+            question: "Somos 4 amigos com 3 figurinhas cada. \nQuantas figurinhas teremos juntos?",
+            answer: 12
+      },
+      {
+            title: "Nível 2 – O caminho até o parque",
+            question: "Há 2 postes em cada quarteirão e eles passaram por 4 quarteirões. \nQuantos postes?",
+            answer: 8
+      },
+      {
+            title: "Nível 3 – Os bancos do parque",
+            question: "São 3 espaços com 4 bancos em cada um. \nQuantos bancos ao todo?",
+            answer: 12
+      },
+      {
+            title: "Nível 4 – As telhas das casas",
+            question: "Um muro tem 3 linhas com 5 telhas em cada linha. \nQuantas telhas há no total?",
+            answer: 15
+      },
+      {
+            title: "Nível 5 – A festa do Mateus 🎉",
+            question: "Há 4 mesas com 3 copinhos em cada uma. Quantos copinhos há ao todo?",
+            answer: 12
+      }
+];
 
 // ===== ESTADO GERAL =====
 let level = 0;
 let canMove = true;
 const keys = {};
-
-
-// ===== PERGUNTAS =====
-const levels = [
-      { question: "4 amigos com 3 figurinhas cada. Quantas figurinhas?", answer: 12 },
-      { question: "2 postes em cada quarteirão, passaram por 4. Total?", answer: 8 },
-      { question: "3 espaços com 4 bancos cada. Quantos bancos?", answer: 12 }
-];
-
+updateBackButton();
+const setTitle = () => {
+      document.getElementById("levelTitle").innerText = levels[level].title;
+};
+setTitle();
 
 // ===== PLAYER =====
 const player = {
@@ -50,31 +76,31 @@ const rightBtn = document.getElementById("rightBtn");
 document.getElementById("mobileControls").style.display = "block";
 
 window.addEventListener("keydown", e => {
-  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
-    e.preventDefault(); // mata scroll
-    keys[e.key] = true;
-  }
+      if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+            e.preventDefault(); // mata scroll
+            keys[e.key] = true;
+      }
 });
 
 window.addEventListener("keyup", e => {
-  if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
-    keys[e.key] = false;
-  }
+      if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+            keys[e.key] = false;
+      }
 });
 
 function bindButton(btn, key) {
-  // Desktop (mouse)
-  btn.addEventListener("mousedown", () => keys[key] = true);
-  btn.addEventListener("mouseup", () => keys[key] = false);
-  btn.addEventListener("mouseleave", () => keys[key] = false);
+      // Desktop (mouse)
+      btn.addEventListener("mousedown", () => keys[key] = true);
+      btn.addEventListener("mouseup", () => keys[key] = false);
+      btn.addEventListener("mouseleave", () => keys[key] = false);
 
-  // Mobile (toque)
-  btn.addEventListener("touchstart", e => {
-    e.preventDefault();
-    keys[key] = true;
-  });
+      // Mobile (toque)
+      btn.addEventListener("touchstart", e => {
+            e.preventDefault();
+            keys[key] = true;
+      });
 
-  btn.addEventListener("touchend", () => keys[key] = false);
+      btn.addEventListener("touchend", () => keys[key] = false);
 }
 
 bindButton(leftBtn, "ArrowLeft");
@@ -83,9 +109,10 @@ bindButton(rightBtn, "ArrowRight");
 
 function update() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       if (gameFinished) {
-            drawGameOver();
+            drawConfetti();
+            requestAnimationFrame(update);
             return;
       }
       if (!questionActive) {
@@ -103,10 +130,6 @@ function update() {
             showQuestionUI();
       }
 
-      if (questionActive) {
-            drawQuestionBubble();
-      }
-
       requestAnimationFrame(update);
 }
 
@@ -116,6 +139,7 @@ function checkAnswer() {
 
       if (userAnswer == levels[level].answer) {
             level++;
+            updateBackButton();
             questionActive = false;
             canMove = true;
             player.x = 20;
@@ -132,9 +156,10 @@ function checkAnswer() {
                   finishGame();
                   return;
             }
+            setTitle();
             canvas.focus(); // devolve controle ao jogo
       } else {
-            document.getElementById("feedback").innerText = "❌ Tenta de novo";
+            document.getElementById("feedback").innerText = "❌ Tente de novo";
       }
 }
 
@@ -153,21 +178,6 @@ function movePlayer() {
 function isNearNpc() {
       const distance = Math.abs(player.x - npc.x);
       return distance < 40; // raio de interação
-}
-
-function drawQuestionBubble() {
-      ctx.fillStyle = "white";
-      ctx.strokeStyle = "#333";
-      ctx.lineWidth = 2;
-
-      // balão
-      ctx.fillRect(150, 40, 400, 90);
-      ctx.strokeRect(150, 40, 400, 90);
-
-      // texto
-      ctx.fillStyle = "#000";
-      ctx.font = "16px Arial";
-      ctx.fillText(levels[level].question, 170, 85);
 }
 
 // ===== DESENHO =====
@@ -199,16 +209,12 @@ function drawNpc() {
       ctx.fillRect(npc.x, npc.y, npc.size, npc.size);
 }
 
-function drawGameOver() {
-      ctx.fillStyle = "#000";
-      ctx.font = "28px Arial";
-      ctx.fillText("🎉 Parabéns!", 250, 100);
-
-      ctx.font = "18px Arial";
-      ctx.fillText("Você chegou à casa do Mateus!", 210, 140);
-}
 
 function showQuestionUI() {
+      const levelData = levels[level];
+
+      document.getElementById("question").innerText = levelData.question;
+
       document.getElementById("questionBox").classList.remove("hidden");
       answerInput.focus();
 }
@@ -228,8 +234,89 @@ function closeQuestion() {
 
 function finishGame() {
       gameFinished = true;
-      questionActive = false;
       canMove = false;
+      questionActive = false;
 
+      createConfetti();
+      document.getElementById("endGame").classList.remove("hidden");
+}
+function goBackLevel() {
+      if (level > 0) {
+            level--;
+            setTitle();
+      }
+
+      // reseta estado do nível atual
+      questionActive = false;
+      canMove = true;
+
+      player.x = 20;
+      answerInput.value = "";
+      document.getElementById("feedback").innerText = "";
       document.getElementById("questionBox").classList.add("hidden");
+
+      // limpa teclas pressionadas
+      for (let key in keys) keys[key] = false;
+      updateBackButton();
+      canvas.focus();
+}
+
+function updateBackButton() {
+      const btn = document.getElementById("restartBtn");
+
+      if (level === 0) {
+            btn.disabled = true;
+            btn.title = "Já está no início";
+      }
+      else if (level >= levels.length) {
+            btn.disabled = true;
+            btn.title = "Jogo finalizado";
+      }
+      else {
+            btn.disabled = false;
+            btn.title = "Voltar para o nível anterior";
+      }
+}
+
+function restartGame() {
+      level = 0;
+      gameFinished = false;
+      canMove = true;
+      questionActive = false;
+
+      player.x = 20;
+      document.getElementById("endGame").classList.add("hidden");
+
+      updateBackButton();
+      canvas.focus();
+}
+
+function createConfetti() {
+      confetti.length = 0;
+
+      for (let i = 0; i < CONFETTI_COUNT; i++) {
+            confetti.push({
+                  x: Math.random() * canvas.width,
+                  y: Math.random() * canvas.height,
+                  r: Math.random() * 4 + 2,
+                  dy: Math.random() * 2 + 1,
+                  color: `hsl(${Math.random() * 360}, 100%, 50%)`
+            });
+      }
+}
+
+function drawConfetti() {
+      confetti.forEach(c => {
+            ctx.beginPath();
+            ctx.fillStyle = c.color;
+            ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+            ctx.fill();
+
+            c.y += c.dy;
+
+            if (c.y > canvas.height) {
+                  c.y = -10;
+                  c.x = Math.random() * canvas.width;
+            }
+      });
 }

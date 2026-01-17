@@ -4,22 +4,42 @@ var questionActive = false;
 var gameFinished = false;
 var canvas = document.getElementById("game");
 canvas.focus();
-var ctx = canvas.getContext("2d"); // ===== ESTADO GERAL =====
+var ctx = canvas.getContext("2d");
+var confetti = [];
+var CONFETTI_COUNT = 120; // ===== PERGUNTAS =====
+
+var levels = [{
+  title: "Nível 1 – O encontro dos amigos",
+  question: "Somos 4 amigos com 3 figurinhas cada. \nQuantas figurinhas teremos juntos?",
+  answer: 12
+}, {
+  title: "Nível 2 – O caminho até o parque",
+  question: "Há 2 postes em cada quarteirão e eles passaram por 4 quarteirões. \nQuantos postes?",
+  answer: 8
+}, {
+  title: "Nível 3 – Os bancos do parque",
+  question: "São 3 espaços com 4 bancos em cada um. \nQuantos bancos ao todo?",
+  answer: 12
+}, {
+  title: "Nível 4 – As telhas das casas",
+  question: "Um muro tem 3 linhas com 5 telhas em cada linha. \nQuantas telhas há no total?",
+  answer: 15
+}, {
+  title: "Nível 5 – A festa do Mateus 🎉",
+  question: "Há 4 mesas com 3 copinhos em cada uma. Quantos copinhos há ao todo?",
+  answer: 12
+}]; // ===== ESTADO GERAL =====
 
 var level = 0;
 var canMove = true;
-var keys = {}; // ===== PERGUNTAS =====
+var keys = {};
+updateBackButton();
 
-var levels = [{
-  question: "4 amigos com 3 figurinhas cada. Quantas figurinhas?",
-  answer: 12
-}, {
-  question: "2 postes em cada quarteirão, passaram por 4. Total?",
-  answer: 8
-}, {
-  question: "3 espaços com 4 bancos cada. Quantos bancos?",
-  answer: 12
-}]; // ===== PLAYER =====
+var setTitle = function setTitle() {
+  document.getElementById("levelTitle").innerText = levels[level].title;
+};
+
+setTitle(); // ===== PLAYER =====
 
 var player = {
   x: 20,
@@ -83,7 +103,8 @@ function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (gameFinished) {
-    drawGameOver();
+    drawConfetti();
+    requestAnimationFrame(update);
     return;
   }
 
@@ -101,10 +122,6 @@ function update() {
     showQuestionUI();
   }
 
-  if (questionActive) {
-    drawQuestionBubble();
-  }
-
   requestAnimationFrame(update);
 }
 
@@ -114,6 +131,7 @@ function checkAnswer() {
 
   if (userAnswer == levels[level].answer) {
     level++;
+    updateBackButton();
     questionActive = false;
     canMove = true;
     player.x = 20;
@@ -131,9 +149,10 @@ function checkAnswer() {
       return;
     }
 
+    setTitle();
     canvas.focus(); // devolve controle ao jogo
   } else {
-    document.getElementById("feedback").innerText = "❌ Tenta de novo";
+    document.getElementById("feedback").innerText = "❌ Tente de novo";
   }
 }
 
@@ -149,19 +168,6 @@ function movePlayer() {
 function isNearNpc() {
   var distance = Math.abs(player.x - npc.x);
   return distance < 40; // raio de interação
-}
-
-function drawQuestionBubble() {
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "#333";
-  ctx.lineWidth = 2; // balão
-
-  ctx.fillRect(150, 40, 400, 90);
-  ctx.strokeRect(150, 40, 400, 90); // texto
-
-  ctx.fillStyle = "#000";
-  ctx.font = "16px Arial";
-  ctx.fillText(levels[level].question, 170, 85);
 } // ===== DESENHO =====
 
 
@@ -194,15 +200,9 @@ function drawNpc() {
   ctx.fillRect(npc.x, npc.y, npc.size, npc.size);
 }
 
-function drawGameOver() {
-  ctx.fillStyle = "#000";
-  ctx.font = "28px Arial";
-  ctx.fillText("🎉 Parabéns!", 250, 100);
-  ctx.font = "18px Arial";
-  ctx.fillText("Você chegou à casa do Mateus!", 210, 140);
-}
-
 function showQuestionUI() {
+  var levelData = levels[level];
+  document.getElementById("question").innerText = levelData.question;
   document.getElementById("questionBox").classList.remove("hidden");
   answerInput.focus();
 }
@@ -223,7 +223,85 @@ function closeQuestion() {
 
 function finishGame() {
   gameFinished = true;
-  questionActive = false;
   canMove = false;
-  document.getElementById("questionBox").classList.add("hidden");
+  questionActive = false;
+  createConfetti();
+  document.getElementById("endGame").classList.remove("hidden");
+}
+
+function goBackLevel() {
+  if (level > 0) {
+    level--;
+    setTitle();
+  } // reseta estado do nível atual
+
+
+  questionActive = false;
+  canMove = true;
+  player.x = 20;
+  answerInput.value = "";
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("questionBox").classList.add("hidden"); // limpa teclas pressionadas
+
+  for (var key in keys) {
+    keys[key] = false;
+  }
+
+  updateBackButton();
+  canvas.focus();
+}
+
+function updateBackButton() {
+  var btn = document.getElementById("restartBtn");
+
+  if (level === 0) {
+    btn.disabled = true;
+    btn.title = "Já está no início";
+  } else if (level >= levels.length) {
+    btn.disabled = true;
+    btn.title = "Jogo finalizado";
+  } else {
+    btn.disabled = false;
+    btn.title = "Voltar para o nível anterior";
+  }
+}
+
+function restartGame() {
+  level = 0;
+  gameFinished = false;
+  canMove = true;
+  questionActive = false;
+  player.x = 20;
+  document.getElementById("endGame").classList.add("hidden");
+  updateBackButton();
+  canvas.focus();
+}
+
+function createConfetti() {
+  confetti.length = 0;
+
+  for (var i = 0; i < CONFETTI_COUNT; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 4 + 2,
+      dy: Math.random() * 2 + 1,
+      color: "hsl(".concat(Math.random() * 360, ", 100%, 50%)")
+    });
+  }
+}
+
+function drawConfetti() {
+  confetti.forEach(function (c) {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+    ctx.fill();
+    c.y += c.dy;
+
+    if (c.y > canvas.height) {
+      c.y = -10;
+      c.x = Math.random() * canvas.width;
+    }
+  });
 }

@@ -11,9 +11,21 @@
 
 
       <h1>🏡 Rumo à Casa do Mateus</h1>
-      <p>Use ⬅️ ➡️ para se mover</p>
+      <h2 id="levelTitle"></h2>
 
-      <canvas id="game" width="700" height="250" tabindex="0"></canvas>
+
+      <div id="gameWrapper">
+            <canvas id="game" width="700" height="250" tabindex="0"></canvas>
+            <button id="restartBtn" onclick="goBackLevel()" title="Já está no início">🔄 Voltar</button>
+            <div id="endGame" class="hidden">
+                  <div class="endGameBox">
+                        <h1>🎉 Parabéns!</h1>
+                        <h3>Você chegou à casa do Mateus!</h3>
+                        <button onclick="restartGame()">🔁 Jogar novamente</button>
+                  </div>
+            </div>
+      </div>
+
 
       <div id="mobileControls">
             <button id="leftBtn">⬅️</button>
@@ -29,6 +41,7 @@
             </div>
             <p id="feedback"></p>
       </div>
+      <p>Use ⬅️ ➡️ para se mover</p>
 
       <script src="script.js"></script>
 </body>

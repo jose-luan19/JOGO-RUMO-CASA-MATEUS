@@ -5,6 +5,8 @@ canvas.focus();
 const ctx = canvas.getContext("2d");
 const confetti = [];
 const CONFETTI_COUNT = 120;
+let feedbackTimer;
+let transitionLock = false;
 
 
 // ===== PERGUNTAS =====
@@ -14,6 +16,7 @@ const levels = [
             label: "Adição de Parcelas Iguais",
             dica: "Adição de Parcelas Iguais",
             question: "Somos 4 amigos com 3 figurinhas cada. \nQuantas figurinhas teremos juntos?",
+            possibleAnswer: [4, 8, 12, 15],
             answer: 12
       },
       {
@@ -21,6 +24,7 @@ const levels = [
             label: "Nível 2 – O caminho até o parque",
             dica: "Adição de Parcelas Iguais",
             question: "Há 2 postes em cada quarteirão e eles passaram por 4 quarteirões. \nQuantos postes?",
+            possibleAnswer: [4, 8, 12, 15],
             answer: 8
       },
       {
@@ -28,6 +32,7 @@ const levels = [
             label: "Nível 3 – Os bancos do parque",
             dica: "Adição de Parcelas Iguais",
             question: "São 3 espaços com 4 bancos em cada um. \nQuantos bancos ao todo?",
+            possibleAnswer: [4, 8, 12, 15],
             answer: 12
       },
       {
@@ -35,6 +40,7 @@ const levels = [
             label: "Nível 4 – As telhas das casas",
             dica: "Adição de Parcelas Iguais",
             question: "Um muro tem 3 linhas com 5 telhas em cada linha. \nQuantas telhas há no total?",
+            possibleAnswer: [4, 8, 12, 15],
             answer: 15
       },
       {
@@ -42,6 +48,7 @@ const levels = [
             label: "Nível 5 – A festa do Mateus 🎉",
             dica: "Adição de Parcelas Iguais",
             question: "Há 4 mesas com 3 copinhos em cada uma. Quantos copinhos há ao todo?",
+            possibleAnswer: [4, 8, 12, 15],
             answer: 12
       }
 ];
@@ -73,12 +80,12 @@ const npc = {
 };
 
 
-answerInput.addEventListener("keydown", e => {
-      if (e.key === "Enter" && questionActive) {
-            e.preventDefault();
-            checkAnswer();
-      }
-});
+// answerInput.addEventListener("keydown", e => {
+//       if (e.key === "Enter" && questionActive) {
+//             e.preventDefault();
+//             checkAnswer();
+//       }
+// });
 
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
@@ -143,36 +150,50 @@ function update() {
       requestAnimationFrame(update);
 }
 
-function checkAnswer() {
-      const input = document.getElementById("answerInput");
-      const userAnswer = input.value;
+function checkAnswer(selected) {
+      if (transitionLock) return;
 
-      if (userAnswer == levels[level].answer) {
-            level++;
-            updateBackButton();
-            questionActive = false;
-            canMove = true;
-            player.x = 20;
+      if (selected === levels[level].answer) {
+            transitionLock = true;
 
-            input.value = "";
-            document.getElementById("questionBox").classList.add("hidden");
+            showFeedback("✅ Resposta certa!", 2000, () => {
+                  level++;
+                  updateBackButton();
 
-            // limpa todas as teclas pressionadas
-            for (let key in keys) {
-                  keys[key] = false;
-            }
-            document.getElementById("feedback").innerText = "";
-            if (level >= levels.length) {
-                  finishGame();
-                  return;
-            }
-            setTitle();
-            canvas.focus(); // devolve controle ao jogo
+                  questionActive = false;
+                  canMove = true;
+                  player.x = 20;
+
+                  document.getElementById("questionBox").classList.add("hidden");
+
+                  for (let key in keys) keys[key] = false;
+
+                  if (level >= levels.length) {
+                        finishGame();
+                        return;
+                  }
+
+                  setTitle();
+                  transitionLock = false;
+                  canvas.focus();
+            });
+
       } else {
-            document.getElementById("feedback").innerText = "❌ Tente de novo";
+            showFeedback("❌ Tente de novo");
       }
 }
 
+function showFeedback(msg, timer = 3000, callback) {
+      const feedback = document.getElementById("feedback");
+
+      clearTimeout(feedbackTimer);
+      feedback.innerText = msg;
+
+      feedbackTimer = setTimeout(() => {
+            feedback.innerText = "";
+            if (callback) callback();
+      }, timer);
+}
 
 function movePlayer() {
       if (!canMove) return;
@@ -221,12 +242,9 @@ function drawNpc() {
 
 
 function showQuestionUI() {
-      const levelData = levels[level];
-
-      document.getElementById("question").innerText = levelData.question;
-
+      document.getElementById("question").innerText = levels[level].question;
       document.getElementById("questionBox").classList.remove("hidden");
-      answerInput.focus();
+      renderAnswers();
 }
 
 function closeQuestion() {
@@ -328,5 +346,20 @@ function drawConfetti() {
                   c.y = -10;
                   c.x = Math.random() * canvas.width;
             }
+      });
+}
+
+function renderAnswers() {
+      const box = document.getElementById("answerBox");
+      box.innerHTML = "";
+
+      levels[level].possibleAnswer.forEach(value => {
+            const btn = document.createElement("button");
+            btn.innerText = value;
+            btn.classList.add("answerBtn");
+
+            btn.onclick = () => checkAnswer(value);
+
+            box.appendChild(btn);
       });
 }

@@ -73,7 +73,7 @@ canvas {
 
 #restartBtn {
       position: absolute;
-      top: 20px;
+      top: 70px;
       left: 10px;
       padding: 6px 12px;
       border-radius: 8px;
@@ -170,4 +170,49 @@ canvas {
 
 .endGameBox button::after {
       content: " 🎉";
+}
+
+#mapScreen {
+      position: fixed;
+      inset: 0;
+      background: url("assets/images/image-map-1.png") center / cover no-repeat;
+      background-size: 40%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.mapOverlay {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 30px 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      position: absolute;
+      top: 5px;
+}
+
+.mapOverlay h1 {
+      margin-bottom: 15px;
+}
+
+.mapOverlay .intro {
+      font-size: 16px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+}
+
+.mapOverlay .destaque {
+      margin-top: 12px;
+      font-weight: bold;
+      color: #2c7be5;
+}
+
+
+.mapOverlay button {
+      margin-top: 15px;
+      font-size: 18px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
 }

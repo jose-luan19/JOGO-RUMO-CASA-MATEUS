@@ -349,3 +349,9 @@ function renderAnswers() {
     box.appendChild(btn);
   });
 }
+
+function startGame() {
+  document.getElementById("mapScreen").classList.add("hidden");
+  document.getElementById("gameWrapper").classList.remove("hidden");
+  canvas.focus();
+}

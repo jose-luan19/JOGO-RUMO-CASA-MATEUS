@@ -9,10 +9,10 @@
 
 <body>
 
-
-      <!-- TELA INICIAL / MAPA -->
-      <div id="mapScreen">
-            <div class="mapOverlay">
+      <!-- MENU -->
+      
+      <div id="menuScreen" class="screen">
+            <div class="menuBox">
                   <h1>🏡 Rumo à Casa do Mateus</h1>
                   <p class="intro">
                         Mateus convidou seus três amigos, Ana, Léo e Sofia, para o seu aniversário em casa.
@@ -31,14 +31,27 @@
                         Para avançar, os amigos precisam resolver situações com
                         <strong>adição de grupos iguais</strong>.
                   </p>
+                  <button onclick="goToMap()">▶️ Iniciar</button>
+            </div>
+      </div>      
+
+      <!-- MAPA -->
+      <div id="mapScreen" class="screen hidden">
+            <div class="mapOverlay">
+                  <h2 id="TitleMap">📍 O Encontro dos Amigos</h2>
+                  <p>
+                        Os amigos estão em suas casas e precisam se encontrar
+                        para seguirem juntos até a casa de Mateus!
+                  </p>
                   <button onclick="startGame()">▶️ Começar Aventura</button>
             </div>
+            <div id="image"></div>
       </div>
 
 
       <div id="gameWrapper" class="hidden">
             <h2 id="levelTitle"></h2>
-            <canvas id="game" width="700" height="250" tabindex="0"></canvas>
+            <canvas id="game" width="900" height="270" tabindex="0"></canvas>
             <button id="restartBtn" onclick="goBackLevel()" title="Já está no início">🔄 Voltar</button>
             <div id="endGame" class="hidden">
                   <div class="endGameBox">
@@ -55,7 +68,7 @@
                   </div>
                   <p id="feedback"></p>
             </div>
-            <p>Use ⬅️ ➡️ para se mover</p>
+            <p id="legend-control">Use ⬅️ ➡️ para se mover</p>
             <div id="mobileControls">
                   <button id="leftBtn">⬅️</button>
                   <button id="rightBtn">➡️</button>

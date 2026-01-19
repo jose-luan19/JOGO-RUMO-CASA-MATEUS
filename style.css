@@ -7,7 +7,6 @@ body {
 canvas {
       background: #ffffff;
       border: 2px solid #333;
-      margin-top: 10px;
 }
 
 .hidden {
@@ -16,7 +15,7 @@ canvas {
 
 #questionBox {
       position: absolute;
-      top: 150px;
+      top: 50px;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 10px;
@@ -67,14 +66,14 @@ canvas {
 
 #gameWrapper {
       position: relative;
-      width: 700px;
+      width: 1000px;
       margin: auto;
 }
 
 #restartBtn {
       position: absolute;
-      top: 70px;
-      left: 10px;
+      top: 50px;
+      left: 60px;
       padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
@@ -173,46 +172,81 @@ canvas {
 }
 
 #mapScreen {
-      position: fixed;
-      inset: 0;
-      background: url("assets/images/image-map-1.png") center / cover no-repeat;
-      background-size: 40%;
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+      height: 100vh;
 }
 
-.mapOverlay {
-      background: rgba(255, 255, 255, 0.8);
-      padding: 30px 40px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-      position: absolute;
-      top: 5px;
-}
-
-.mapOverlay h1 {
-      margin-bottom: 15px;
-}
-
-.mapOverlay .intro {
+.intro{
       font-size: 16px;
-      margin-bottom: 10px;
-      line-height: 1.4;
 }
-
-.mapOverlay .destaque {
-      margin-top: 12px;
+.destaque{
+      font-size: 18px;
       font-weight: bold;
       color: #2c7be5;
 }
 
+.mapOverlay {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 0 5px 10px 5px;
+      border-radius: 15px;
+      text-align: center;
+      word-wrap: break-word;
+      width: 350px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+#image {
+      width: 800px;
+      height: 250px;
+      background: url("assets/images/map.png") center / cover no-repeat;
+      margin-top: 20px;
+}
 
 .mapOverlay button {
+      font-size: 18px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+
+}.mapOverlay p {
+      margin: 12px 0;
+      font-size: 14px;
+}
+.screen {
+  position: fixed;
+  inset: 0;
+}
+
+#menuScreen {
+  background: linear-gradient(#cce5ff, #eef3ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menuBox {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+}
+.menuBox button {
       margin-top: 15px;
       font-size: 18px;
       padding: 12px 24px;
       border-radius: 10px;
       cursor: pointer;
+}
+#levelTitle {
+      margin: 10px 0;
+}
+#TitleMap {
+      margin: 15px 0 0 0;
+}
+
+#legend-control{
+      margin: 0;
 }

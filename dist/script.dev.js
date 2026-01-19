@@ -60,22 +60,18 @@ setTitle(); // ===== PLAYER =====
 
 var player = {
   x: 20,
-  y: 180,
-  size: 25,
+  y: 150,
+  size: 80,
+  image: "assets/images/cirancas.png",
   speed: 3
 }; // ===== NPC =====
 
 var npc = {
-  x: 600,
-  y: 180,
-  size: 25
-}; // answerInput.addEventListener("keydown", e => {
-//       if (e.key === "Enter" && questionActive) {
-//             e.preventDefault();
-//             checkAnswer();
-//       }
-// });
-
+  x: 800,
+  y: 125,
+  size: 100,
+  image: "assets/images/Questao.png"
+};
 var leftBtn = document.getElementById("leftBtn");
 var rightBtn = document.getElementById("rightBtn");
 document.getElementById("mobileControls").style.display = "block";
@@ -191,42 +187,41 @@ function movePlayer() {
   if (keys["ArrowLeft"]) player.x -= player.speed; // trava nos limites do canvas
 
   player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
-  console.log(keys, canMove);
 }
 
 function isNearNpc() {
   var distance = Math.abs(player.x - npc.x);
-  return distance < 40; // raio de interação
+  return distance < 130; // raio de interação
 } // ===== DESENHO =====
 
 
 function drawGround() {
   // Terra
   ctx.fillStyle = "#c2a15f";
-  ctx.fillRect(0, 210, canvas.width, 40); // Grama
+  ctx.fillRect(0, 230, canvas.width, 40); // Grama
 
   ctx.fillStyle = "#4CAF50";
-  ctx.fillRect(0, 200, canvas.width, 10); // Linha de separação (textura fake)
+  ctx.fillRect(0, 220, canvas.width, 10); // Linha de separação (textura fake)
 
   ctx.strokeStyle = "#3e8e41";
   ctx.beginPath();
-  ctx.moveTo(0, 200);
-  ctx.lineTo(canvas.width, 200);
+  ctx.moveTo(0, 220);
+  ctx.lineTo(canvas.width, 220);
   ctx.stroke();
 }
 
 update();
 
 function drawPlayer() {
-  ctx.fillStyle = "#1e90ff"; // azul
-
-  ctx.fillRect(player.x, player.y, player.size, player.size);
+  var playerImg = new Image();
+  playerImg.src = player.image;
+  ctx.drawImage(playerImg, player.x, player.y, player.size + 80, player.size);
 }
 
 function drawNpc() {
-  ctx.fillStyle = "#ff6347"; // vermelho
-
-  ctx.fillRect(npc.x, npc.y, npc.size, npc.size);
+  var npcImg = new Image();
+  npcImg.src = npc.image;
+  ctx.drawImage(npcImg, npc.x, npc.y, npc.size, npc.size);
 }
 
 function showQuestionUI() {
@@ -239,7 +234,6 @@ function closeQuestion() {
   questionActive = false;
   canMove = true;
   player.x = 20;
-  answerInput.value = "";
   document.getElementById("questionBox").classList.add("hidden");
 
   for (var key in keys) {
@@ -267,7 +261,6 @@ function goBackLevel() {
   questionActive = false;
   canMove = true;
   player.x = 20;
-  answerInput.value = "";
   document.getElementById("feedback").innerText = "";
   document.getElementById("questionBox").classList.add("hidden"); // limpa teclas pressionadas
 
@@ -301,6 +294,7 @@ function restartGame() {
   questionActive = false;
   player.x = 20;
   document.getElementById("endGame").classList.add("hidden");
+  showScreen("menuScreen");
   updateBackButton();
   canvas.focus();
 }
@@ -350,8 +344,18 @@ function renderAnswers() {
   });
 }
 
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(function (s) {
+    return s.classList.add("hidden");
+  });
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function goToMap() {
+  showScreen("mapScreen");
+}
+
 function startGame() {
-  document.getElementById("mapScreen").classList.add("hidden");
-  document.getElementById("gameWrapper").classList.remove("hidden");
+  showScreen("gameWrapper");
   canvas.focus();
 }

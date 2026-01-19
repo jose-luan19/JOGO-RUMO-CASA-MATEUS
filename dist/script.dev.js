@@ -294,7 +294,7 @@ function restartGame() {
   questionActive = false;
   player.x = 20;
   document.getElementById("endGame").classList.add("hidden");
-  showScreen("menuScreen");
+  setTitle();
   updateBackButton();
   canvas.focus();
 }

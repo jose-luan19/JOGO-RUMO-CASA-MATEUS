@@ -1,3 +1,6 @@
+/* =====================================================
+   BASE
+===================================================== */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -5,7 +8,7 @@ body {
 }
 
 canvas {
-  background: #ffffff;
+  background: #fff;
   border: 2px solid #333;
 }
 
@@ -13,70 +16,49 @@ canvas {
   display: none !important;
 }
 
-#questionBox {
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
+/* =====================================================
+   UTILITÁRIOS / PADRÕES
+===================================================== */
+button {
+  cursor: pointer;
+  border: none;
   border-radius: 10px;
-  width: 350px;
+}
+
+.box {
   background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-
-#answerBox {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin: 0 10px;
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.answerBtn {
-  padding: 8px 14px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: none;
-  background: #1e90ff;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
-}
+.text-small { font-size: 14px; }
+.text-medium { font-size: 16px; }
+.text-large { font-size: 18px; }
 
-.answerBtn:hover {
-  background: #1565c0;
-  transform: scale(1.05);
-}
-
-.answerBtn:active {
-  transform: scale(0.95);
-}
-
-#mobileControls {
-  display: none;
-  margin-top: 10px;
-}
-
-#mobileControls button {
-  font-size: 28px;
-  padding: 15px 30px;
-  margin: 0 10px;
-  border-radius: 10px;
-}
-
+/* =====================================================
+   GAME WRAPPER
+===================================================== */
 #gameWrapper {
   position: relative;
   width: 1000px;
   margin: auto;
 }
 
+/* =====================================================
+   BOTÃO VOLTAR
+===================================================== */
 #restartBtn {
   position: absolute;
   top: 50px;
   left: 60px;
   padding: 6px 12px;
   border-radius: 8px;
-  cursor: pointer;
 }
 
 #restartBtn:hover {
@@ -92,18 +74,53 @@ canvas {
   transform: none;
 }
 
+/* =====================================================
+   QUESTION BOX
+===================================================== */
+#questionBox {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+}
+
 #question {
   height: 50px;
   width: calc(100% - 1px);
   margin-bottom: 12px;
 }
 
-#answerInput::-webkit-inner-spin-button,
-#answerInput::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+#answerBox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 0 10px;
 }
 
+/* =====================================================
+   ANSWER BUTTONS
+===================================================== */
+.answerBtn {
+  padding: 8px 14px;
+  font-size: 16px;
+  background: #1e90ff;
+  color: white;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.answerBtn:hover {
+  background: #1565c0;
+  transform: scale(1.05);
+}
+
+.answerBtn:active {
+  transform: scale(0.95);
+}
+
+/* =====================================================
+   INPUT (caso volte a usar)
+===================================================== */
 #answerInput {
   width: 100px;
   padding: 5px;
@@ -118,26 +135,57 @@ canvas {
   box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
 }
 
+#answerInput::-webkit-inner-spin-button,
+#answerInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* =====================================================
+   MOBILE CONTROLS
+===================================================== */
+#mobileControls {
+  display: none;
+  margin-top: 10px;
+}
+
+#mobileControls button {
+  font-size: 28px;
+  padding: 15px 30px;
+  margin: 0 10px;
+}
+
+/* =====================================================
+   END GAME
+===================================================== */
 #endGame {
   position: absolute;
   top: 42px;
   left: 50px;
   width: 900px;
   height: 275px;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.1);
   z-index: 20;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* Caixa do alerta */
+#endGame.center-flex {
+  display: flex;
+}
+
 .endGameBox {
-  background: white;
-  padding: 20px 30px;
+  position: absolute;
+  top: 60px;
+  left: 300px;
+  background: rgba(255, 255, 255, 0.8);
+  padding-bottom: 10px;
+  width: 300px;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.endGameBox h1, h3 {
+  margin: 10px 0 0 0;
 }
 
 .endGameBox button {
@@ -145,13 +193,8 @@ canvas {
   padding: 14px 28px;
   font-size: 1.1rem;
   font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-
   background: linear-gradient(135deg, #ffb703, #fb8500);
   color: #fff;
-
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -169,66 +212,29 @@ canvas {
   content: " 🎉";
 }
 
-#mapScreen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.intro {
-  font-size: 16px;
-}
-
-.destaque {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2c7be5;
-}
-
-.mapOverlay {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 0 5px 10px 5px;
-  border-radius: 15px;
-  text-align: center;
-  word-wrap: break-word;
-  width: 350px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-#image {
-  width: 800px;
-  height: 250px;
-  background: url("assets/images/map.png") center / cover no-repeat;
-  margin-top: 20px;
-}
-
-.mapOverlay button {
-  font-size: 18px;
-  padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-
-}
-
-.mapOverlay p {
-  margin: 12px 0;
-  font-size: 14px;
-}
-
+/* =====================================================
+   TELAS (MENU / MAPA)
+===================================================== */
 .screen {
   position: fixed;
   inset: 0;
 }
 
-#menuScreen {
-  background: linear-gradient(#cce5ff, #eef3ff);
+#menuScreen,
+#mapScreen {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
+#menuScreen {
+  background: linear-gradient(#cce5ff, #eef3ff);
+}
+
+/* =====================================================
+   MENU
+===================================================== */
 .menuBox {
   background: white;
   padding: 40px;
@@ -240,8 +246,47 @@ canvas {
   margin-top: 15px;
   font-size: 18px;
   padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
+}
+
+/* =====================================================
+   MAPA
+===================================================== */
+.mapOverlay {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0 5px 10px;
+  border-radius: 15px;
+  width: 350px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.mapOverlay p {
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.mapOverlay button {
+  font-size: 18px;
+  padding: 12px 24px;
+}
+
+#image {
+  width: 800px;
+  height: 250px;
+  background: url("assets/images/map.png") center / cover no-repeat;
+  margin-top: 20px;
+}
+
+/* =====================================================
+   TEXTOS
+===================================================== */
+.intro {
+  font-size: 16px;
+}
+
+.destaque {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c7be5;
 }
 
 #levelTitle {
@@ -249,7 +294,7 @@ canvas {
 }
 
 #TitleMap {
-  margin: 15px 0 0 0;
+  margin: 15px 0 0;
 }
 
 #legend-control {

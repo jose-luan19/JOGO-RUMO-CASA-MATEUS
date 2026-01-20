@@ -4,7 +4,7 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: #eef3ff;
+  margin: 0;
 }
 
 canvas {
@@ -25,29 +25,10 @@ button {
   border-radius: 10px;
 }
 
-.box {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
 .center-flex {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.text-small { font-size: 14px; }
-.text-medium { font-size: 16px; }
-.text-large { font-size: 18px; }
-
-/* =====================================================
-   GAME WRAPPER
-===================================================== */
-#gameWrapper {
-  position: relative;
-  width: 1000px;
-  margin: auto;
 }
 
 /* =====================================================
@@ -55,8 +36,10 @@ button {
 ===================================================== */
 #restartBtn {
   position: absolute;
-  top: 50px;
-  left: 60px;
+  top: 12px;
+  left: 12px;
+
+  z-index: 10;
   padding: 6px 12px;
   border-radius: 8px;
 }
@@ -77,25 +60,13 @@ button {
 /* =====================================================
    QUESTION BOX
 ===================================================== */
-#questionBox {
+#answerButtons {
   position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 350px;
-}
-
-#question {
-  height: 50px;
-  width: calc(100% - 1px);
-  margin-bottom: 12px;
-}
-
-#answerBox {
+  top: 570px;
+  width: 600px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin: 0 10px;
+  grid-template-columns: repeat(4, 4fr);
+  gap: 30px;
 }
 
 /* =====================================================
@@ -104,13 +75,15 @@ button {
 .answerBtn {
   padding: 8px 14px;
   font-size: 16px;
-  background: #1e90ff;
-  color: white;
+  background: #8b918c;
+  color: rgb(255, 255, 255);
   transition: transform 0.1s, background 0.2s;
+  box-shadow: 12px 12px 15px rgb(0 0 0 / 88%);
+  border-radius: 10px;
 }
 
 .answerBtn:hover {
-  background: #1565c0;
+  background: #1536dc;
   transform: scale(1.05);
 }
 
@@ -118,41 +91,12 @@ button {
   transform: scale(0.95);
 }
 
-/* =====================================================
-   INPUT (caso volte a usar)
-===================================================== */
-#answerInput {
-  width: 100px;
-  padding: 5px;
-  font-size: 18px;
-  text-align: center;
-  border-radius: 8px;
-  border: 2px solid #1e90ff;
+.wrongAnswer {
+  background-color: rgba(227, 10, 10, 1);
 }
 
-#answerInput:focus {
-  border-color: #ff9800;
-  box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
-}
-
-#answerInput::-webkit-inner-spin-button,
-#answerInput::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* =====================================================
-   MOBILE CONTROLS
-===================================================== */
-#mobileControls {
-  display: none;
-  margin-top: 10px;
-}
-
-#mobileControls button {
-  font-size: 28px;
-  padding: 15px 30px;
-  margin: 0 10px;
+.correctAnswer {
+  background-color: rgba(10, 227, 33, 1);
 }
 
 /* =====================================================
@@ -184,7 +128,8 @@ button {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.endGameBox h1, h3 {
+.endGameBox h1,
+h3 {
   margin: 10px 0 0 0;
 }
 
@@ -215,6 +160,12 @@ button {
 /* =====================================================
    TELAS (MENU / MAPA)
 ===================================================== */
+.fundo {
+  background: url('assets/images/fundo-body.jpg') center / cover no-repeat;
+  width: 100vw;
+  height: 100vh;
+}
+
 .screen {
   position: fixed;
   inset: 0;
@@ -228,22 +179,18 @@ button {
   flex-direction: column;
 }
 
-#menuScreen {
-  background: linear-gradient(#cce5ff, #eef3ff);
-}
-
 /* =====================================================
    MENU
 ===================================================== */
 .menuBox {
-  background: white;
-  padding: 40px;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 20px;
   border-radius: 16px;
   text-align: center;
 }
 
 .menuBox button {
-  margin-top: 15px;
+  background-color: #23f4f0;
   font-size: 18px;
   padding: 12px 24px;
 }
@@ -252,7 +199,7 @@ button {
    MAPA
 ===================================================== */
 .mapOverlay {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.4);
   padding: 0 5px 10px;
   border-radius: 15px;
   width: 350px;
@@ -287,10 +234,12 @@ button {
   font-size: 18px;
   font-weight: bold;
   color: #2c7be5;
+  margin: 16px 0;
 }
 
 #levelTitle {
-  margin: 10px 0;
+  margin-bottom: 10px;
+  margin-top: 2px;
 }
 
 #TitleMap {
@@ -299,4 +248,37 @@ button {
 
 #legend-control {
   margin: 0;
+}
+
+#gameImages {
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+}
+
+.box-imagem {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 750px;
+}
+
+.box-imagem img {
+  width: 100%;
+  height: auto;
+}
+
+#feedback {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 1);
+  top: 511px;
+  color: #241717;
+  box-shadow: 0px -6px 20px 0px rgb(0 0 0 / 88%);
+  border-radius: 10px;
+  padding: 3px 8px;
 }

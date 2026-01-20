@@ -9,69 +9,52 @@
 
 <body>
 
-      <!-- MENU -->
-      
-      <div id="menuScreen" class="screen">
-            <div class="menuBox">
-                  <h1>🏡 Rumo à Casa do Mateus</h1>
-                  <p class="intro">
-                        Mateus convidou seus três amigos, Ana, Léo e Sofia, para o seu aniversário em casa.
-                  </p>
+      <div class="fundo">
+            <!-- MENU -->
+            <div id="menuScreen" class="screen">
+                  <div class="menuBox">
+                        <h1>🏡 Rumo à Casa do Mateus</h1>
+                        <p class="intro">
+                              Mateus convidou seus três amigos, Ana, Léo e Sofia, para o seu aniversário em casa.
+                        </p>
 
-                  <p class="intro">
-                        Animados com o convite, eles combinam de se encontrar e seguir juntos pelo caminho.
-                  </p>
+                        <p class="intro">
+                              Animados com o convite, eles combinam de se encontrar e seguir juntos pelo caminho.
+                        </p>
 
-                  <p class="intro">
-                        Mas o trajeto até a casa de Mateus é dividido em cinco etapas,
-                        e em cada uma delas surge um desafio matemático!
-                  </p>
+                        <p class="intro">
+                              Mas o trajeto até a casa de Mateus é dividido em cinco etapas,
+                              e em cada uma delas surge um desafio matemático!
+                        </p>
 
-                  <p class="intro destaque">
-                        Para avançar, os amigos precisam resolver situações com
-                        <strong>adição de grupos iguais</strong>.
-                  </p>
-                  <button onclick="goToMap()">▶️ Iniciar</button>
+                        <p class="intro destaque">
+                              Para avançar, os amigos precisam resolver situações com
+                              <strong>adição de grupos iguais</strong>.
+                        </p>
+                        <button onclick="startGame()">▶️ Começar Aventura</button>
+                  </div>
             </div>
-      </div>      
+            <!-- GAME -->
+            <div id="gameScreen" class="hidden">
+                  <h2 id="levelTitle"></h2>
 
-      <!-- MAPA -->
-      <div id="mapScreen" class="screen hidden">
-            <div class="mapOverlay">
-                  <h2 id="TitleMap">📍 O Encontro dos Amigos</h2>
-                  <p>
-                        Os amigos estão em suas casas e precisam se encontrar
-                        para seguirem juntos até a casa de Mateus!
-                  </p>
-                  <button onclick="startGame()">▶️ Começar Aventura</button>
+                  <div id="gameImages">
+                        <div class="box-imagem">
+                              <button id="restartBtn" onclick="goBackLevel()" title="Já está no início">🔄 Voltar</button>
+                              <img id="imgLevel" src="">
+                        </div>
+                        <div id="answerButtons"></div>
+                        <p id="feedback"></p>
+                  </div>
             </div>
-            <div id="image"></div>
-      </div>
-
-      <!-- GAME -->
-      <div id="gameWrapper" class="hidden">
-            <h2 id="levelTitle"></h2>
-            <canvas id="game" width="900" height="270" tabindex="0"></canvas>
-            <button id="restartBtn" onclick="goBackLevel()" title="Já está no início">🔄 Voltar</button>
-            <div id="endGame" class="hidden">
+            <div id="endGame" class="hidden"> 
                   <div class="endGameBox">
                         <h1>🎉 Parabéns!</h1>
                         <h3>Você chegou à casa do Mateus!</h3>
                         <button onclick="restartGame()">🔁 Jogar novamente</button>
                   </div>
             </div>
-            <div id="questionBox" class="hidden">
-                  <p id="question"></p>
-                  <div id="answerBox"> </div>
-                  <p id="feedback"></p>
-            </div>
-            <p id="legend-control">Use ⬅️ ➡️ para se mover</p>
-            <div id="mobileControls">
-                  <button id="leftBtn">⬅️</button>
-                  <button id="rightBtn">➡️</button>
-            </div>
       </div>
-
 
       <script src="script.js"></script>
 </body>

@@ -3,6 +3,60 @@ const CONFETTI_COUNT = 120;
 let feedbackTimer;
 let transitionLock = false;
 
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+let confettiPieces = [];
+const colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function createConfettiPiece() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    size: Math.random() * 8 + 4,
+    speed: Math.random() * 3 + 2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rotation: Math.random() * 360
+  };
+}
+
+function startConfetti() {
+  confettiPieces = Array.from({ length: 150 }, createConfettiPiece);
+  animateConfetti();
+}
+
+function animateConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  confettiPieces.forEach(p => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    ctx.restore();
+
+    p.y += p.speed;
+    p.rotation += p.speed;
+
+    if (p.y > canvas.height) {
+      p.y = -10;
+      p.x = Math.random() * canvas.width;
+    }
+  });
+
+  requestAnimationFrame(animateConfetti);
+}
+
+
 
 // ===== LEVELS =====
 const levels = [
@@ -87,21 +141,19 @@ function checkAnswer(btnSelected) {
 
 function showFeedback(msg, callback, timer = 2000) {
   const feedback = document.getElementById("feedback");
-  // feedback.classList.remove("hidden");
   clearTimeout(feedbackTimer);
   feedback.innerText = msg;
 
   feedbackTimer = setTimeout(() => {
     feedback.innerText = "";
-    // feedback.classList.add("hidden");
     if (callback) callback();
   }, timer);
 }
 function finishGame() {
   // createConfetti();
-  // drawConfetti();
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("endGame").classList.remove("hidden");
+  startConfetti();
 }
 function goBackLevel() {
   if (level > 0) {
@@ -137,38 +189,9 @@ function restartGame() {
   document.getElementById("gameScreen").classList.remove("hidden");
   level = 0;
   setTitle();
+  setImageLevel();
   updateBackButton();
 }
-
-// function createConfetti() {
-//   confetti.length = 0;
-
-//   for (let i = 0; i < CONFETTI_COUNT; i++) {
-//     confetti.push({
-//       x: Math.random() * canvas.width,
-//       y: Math.random() * canvas.height,
-//       r: Math.random() * 4 + 2,
-//       dy: Math.random() * 2 + 1,
-//       color: `hsl(${Math.random() * 360}, 100%, 50%)`
-//     });
-//   }
-// }
-
-// function drawConfetti() {
-//   confetti.forEach(c => {
-//     ctx.beginPath();
-//     ctx.fillStyle = c.color;
-//     ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-//     ctx.fill();
-
-//     c.y += c.dy;
-
-//     if (c.y > canvas.height) {
-//       c.y = -10;
-//       c.x = Math.random() * canvas.width;
-//     }
-//   });
-// }
 
 function renderAnswersImage() {
   const box = document.getElementById("answerButtons");
@@ -195,4 +218,3 @@ function startGame() {
   showScreen("gameScreen");
   renderAnswersImage();
 }
-

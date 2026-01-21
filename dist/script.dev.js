@@ -134,10 +134,14 @@ function checkAnswer(btnSelected) {
 function showFeedback(msg, callback) {
   var timer = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2000;
   var feedback = document.getElementById("feedback");
+  feedback.classList.remove("hidden");
   clearTimeout(feedbackTimer);
   feedback.innerText = msg;
   feedbackTimer = setTimeout(function () {
-    feedback.innerText = "";
+    if (!feedback.classList.contains("hidden")) {
+      feedback.classList.add("hidden");
+    }
+
     if (callback) callback();
   }, timer);
 }
@@ -156,7 +160,7 @@ function goBackLevel() {
     setImageLevel();
   }
 
-  document.getElementById("feedback").innerText = "";
+  document.getElementById("feedback").classList.add("hidden");
 
   for (var key in keys) {
     keys[key] = false;

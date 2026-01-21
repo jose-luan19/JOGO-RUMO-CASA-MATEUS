@@ -141,11 +141,15 @@ function checkAnswer(btnSelected) {
 
 function showFeedback(msg, callback, timer = 2000) {
   const feedback = document.getElementById("feedback");
+  feedback.classList.remove("hidden");
+
   clearTimeout(feedbackTimer);
   feedback.innerText = msg;
 
   feedbackTimer = setTimeout(() => {
-    feedback.innerText = "";
+    if(!feedback.classList.contains("hidden")) {
+      feedback.classList.add("hidden");
+    }
     if (callback) callback();
   }, timer);
 }
@@ -161,7 +165,7 @@ function goBackLevel() {
     setTitle();
     setImageLevel();
   }
-  document.getElementById("feedback").innerText = "";
+  document.getElementById("feedback").classList.add("hidden");
   for (let key in keys) keys[key] = false;
   updateBackButton();
 }

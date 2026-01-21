@@ -1,15 +1,14 @@
 /* =====================================================
    BASE
 ===================================================== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   text-align: center;
   margin: 0;
-}
-
-canvas {
-  background: #fff;
-  border: 2px solid #333;
 }
 
 .hidden {
@@ -120,7 +119,8 @@ button {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.endGameBox h1, h3 {
+.endGameBox h1,
+h3 {
   margin: 10px 0 0 0;
 }
 
@@ -153,8 +153,11 @@ button {
 ===================================================== */
 .fundo {
   background: url('assets/images/fundo-body.jpg') center / cover no-repeat;
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
 }
 
 .screen {
@@ -209,8 +212,8 @@ button {
   justify-self: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 40px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .box-imagem {
@@ -227,10 +230,12 @@ button {
 
 #feedback {
   position: absolute;
+  bottom: 210px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 20px;
   font-weight: bold;
   background-color: rgba(255, 255, 255, 1);
-  top: 511px;
   color: #241717;
   box-shadow: 0px -6px 20px 0px rgb(0 0 0 / 88%);
   border-radius: 10px;
@@ -244,7 +249,8 @@ button {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 21; /* atrás da box */
+  z-index: 21;
+  /* atrás da box */
   pointer-events: none;
   background: transparent;
 }

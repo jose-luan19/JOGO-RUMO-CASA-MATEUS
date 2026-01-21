@@ -30,6 +30,104 @@ button {
   align-items: center;
 }
 
+.fundo {
+  background: url('assets/images/fundo-body.jpg') center / cover no-repeat;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+}
+
+/* =====================================================
+  MENU
+===================================================== */
+
+#menuScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.menuBox {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.menuBox button {
+  background-color: #23f4f0;
+  font-size: 18px;
+  padding: 12px 24px;
+}
+
+/* =====================================================
+   TEXTOS
+===================================================== */
+.intro {
+  font-size: 16px;
+}
+
+.destaque {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c7be5;
+  margin: 16px 0;
+}
+
+/* =====================================================
+GAME
+===================================================== */
+
+#levelTitle {
+  margin-bottom: 10px;
+  margin-top: 2px;
+}
+#gameScreen {
+  min-height: 100vh;
+}
+#gameImages {
+  position: relative; 
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 20px;
+  margin-bottom: 0;
+}
+
+.box-imagem {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 750px;
+}
+
+.box-imagem img {
+  width: 100%;
+  height: auto;
+}
+
+#feedback {
+  position: absolute;
+  top: calc(100% - 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #241717;
+  box-shadow: 0px -6px 20px 0px rgb(0 0 0 / 88%);
+  border-radius: 10px;
+  padding: 3px 8px;
+}
+
 /* =====================================================
    BOTÃO VOLTAR
 ===================================================== */
@@ -57,20 +155,16 @@ button {
 }
 
 /* =====================================================
-   QUESTION BOX
+ANSWER BUTTONS
 ===================================================== */
 #answerButtons {
-  position: absolute;
-  top: 570px;
-  width: 600px;
+  margin-top: 130px;
+  width: min(600px, 95%);
   display: grid;
-  grid-template-columns: repeat(4, 4fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 30px;
 }
 
-/* =====================================================
-   ANSWER BUTTONS
-===================================================== */
 .answerBtn {
   padding: 8px 14px;
   font-size: 16px;
@@ -82,24 +176,40 @@ button {
 }
 
 .answerBtn:hover {
-  background: #1536dc;
   transform: scale(1.05);
 }
 
 .answerBtn:active {
+  background: #1536dc;
   transform: scale(0.95);
 }
 
 .wrongAnswer {
-  background-color: rgba(227, 10, 10, 1);
+  background: rgba(227, 10, 10, 1);
 }
 
 .correctAnswer {
-  background-color: rgba(10, 227, 33, 1);
+  background: rgba(10, 227, 33, 1);
 }
 
 /* =====================================================
-   END GAME
+   CONFETTI
+===================================================== */
+#confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 21;
+  /* atrás da box */
+  pointer-events: none;
+  background: transparent;
+}
+
+
+/* =====================================================
+  END GAME
 ===================================================== */
 #endGame {
   width: 100vw;
@@ -146,111 +256,4 @@ h3 {
 
 .endGameBox button::after {
   content: " 🎉";
-}
-
-/* =====================================================
-   TELAS (MENU / MAPA)
-===================================================== */
-.fundo {
-  background: url('assets/images/fundo-body.jpg') center / cover no-repeat;
-  position: fixed;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-}
-
-.screen {
-  position: fixed;
-  inset: 0;
-}
-
-#menuScreen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-/* =====================================================
-   MENU
-===================================================== */
-.menuBox {
-  background: rgba(255, 255, 255, 0.4);
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-}
-
-.menuBox button {
-  background-color: #23f4f0;
-  font-size: 18px;
-  padding: 12px 24px;
-}
-
-/* =====================================================
-   TEXTOS
-===================================================== */
-.intro {
-  font-size: 16px;
-}
-
-.destaque {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2c7be5;
-  margin: 16px 0;
-}
-
-#levelTitle {
-  margin-bottom: 10px;
-  margin-top: 2px;
-}
-
-#gameImages {
-  display: flex;
-  justify-self: center;
-  align-items: center;
-  flex-direction: column;
-  padding-bottom: 20px;
-  margin-bottom: 0;
-}
-
-.box-imagem {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  max-width: 750px;
-}
-
-.box-imagem img {
-  width: 100%;
-  height: auto;
-}
-
-#feedback {
-  position: absolute;
-  bottom: 210px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 20px;
-  font-weight: bold;
-  background-color: rgba(255, 255, 255, 1);
-  color: #241717;
-  box-shadow: 0px -6px 20px 0px rgb(0 0 0 / 88%);
-  border-radius: 10px;
-  padding: 3px 8px;
-}
-
-/* ======================= confetti  ==============================*/
-#confetti {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 21;
-  /* atrás da box */
-  pointer-events: none;
-  background: transparent;
 }

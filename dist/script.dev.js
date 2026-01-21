@@ -1,13 +1,34 @@
 "use strict";
 
-var confetti = [];
-var CONFETTI_COUNT = 120;
+var confettiPieces = [];
 var feedbackTimer;
 var transitionLock = false;
+var level = 0;
+var imageCache = [];
+var colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
+var keys = {};
+
+var setTitle = function setTitle() {
+  document.getElementById("levelTitle").innerText = levels[level].title;
+};
+
+var setImageLevel = function setImageLevel() {
+  document.getElementById("imgLevel").src = levels[level].image;
+  preloadNextLevel(level);
+};
+
+function preloadNextLevel(index) {
+  var nextIndex = index + 1;
+  if (nextIndex >= levels.length) return;
+  if (imageCache[nextIndex]) return;
+  var img = new Image();
+  img.src = levels[nextIndex].image;
+  imageCache[nextIndex] = img;
+} // ===== Confetti =====
+
+
 var canvas = document.getElementById("confetti");
 var ctx = canvas.getContext("2d");
-var confettiPieces = [];
-var colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -81,21 +102,7 @@ var levels = [{
   image: "assets/images/fase5.png",
   possibleAnswer: [4, 8, 12, 15],
   answer: 12
-}]; // ===== ESTADO GERAL =====
-
-var level = 0;
-var keys = {};
-updateBackButton();
-
-var setTitle = function setTitle() {
-  document.getElementById("levelTitle").innerText = levels[level].title;
-};
-
-var setImageLevel = function setImageLevel() {
-  document.getElementById("imgLevel").src = levels[level].image;
-};
-
-setTitle();
+}];
 setImageLevel();
 
 function checkAnswer(btnSelected) {
@@ -147,7 +154,6 @@ function showFeedback(msg, callback) {
 }
 
 function finishGame() {
-  // createConfetti();
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("endGame").classList.remove("hidden");
   startConfetti();
@@ -218,6 +224,9 @@ function showScreen(id) {
 }
 
 function startGame() {
-  showScreen("gameScreen");
+  updateBackButton();
+  setTitle();
+  setImageLevel();
   renderAnswersImage();
+  showScreen("gameScreen");
 }

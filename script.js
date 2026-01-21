@@ -1,13 +1,32 @@
-const confetti = [];
-const CONFETTI_COUNT = 120;
+let confettiPieces = [];
 let feedbackTimer;
 let transitionLock = false;
+let level = 0;
+const imageCache = [];
+const colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
+const keys = {};
+const setTitle = () => {
+  document.getElementById("levelTitle").innerText = levels[level].title;
+};
+const setImageLevel = () => {
+  document.getElementById("imgLevel").src = levels[level].image;
+  preloadNextLevel(level);
+}
 
+function preloadNextLevel(index) {
+  const nextIndex = index + 1;
+
+  if (nextIndex >= levels.length) return;
+  if (imageCache[nextIndex]) return;
+
+  const img = new Image();
+  img.src = levels[nextIndex].image;
+  imageCache[nextIndex] = img;
+}
+
+// ===== Confetti =====
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
-
-let confettiPieces = [];
-const colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -56,8 +75,6 @@ function animateConfetti() {
   requestAnimationFrame(animateConfetti);
 }
 
-
-
 // ===== LEVELS =====
 const levels = [
   {
@@ -91,21 +108,7 @@ const levels = [
     answer: 12
   }
 ];
-
-// ===== ESTADO GERAL =====
-let level = 0;
-const keys = {};
-updateBackButton();
-const setTitle = () => {
-  document.getElementById("levelTitle").innerText = levels[level].title;
-};
-const setImageLevel = () => {
-  document.getElementById("imgLevel").src = levels[level].image;
-}
-setTitle();
 setImageLevel();
-
-
 
 function checkAnswer(btnSelected) {
   if (transitionLock) return;
@@ -113,7 +116,7 @@ function checkAnswer(btnSelected) {
   if (valueSelected == levels[level].answer) {
     transitionLock = true;
     btnSelected.classList.add("correctAnswer");
-    
+
     showFeedback("✅ Resposta certa!", () => {
       level++;
       btnSelected.classList.remove("correctAnswer");
@@ -147,18 +150,18 @@ function showFeedback(msg, callback, timer = 2000) {
   feedback.innerText = msg;
 
   feedbackTimer = setTimeout(() => {
-    if(!feedback.classList.contains("hidden")) {
+    if (!feedback.classList.contains("hidden")) {
       feedback.classList.add("hidden");
     }
     if (callback) callback();
   }, timer);
 }
 function finishGame() {
-  // createConfetti();
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("endGame").classList.remove("hidden");
   startConfetti();
 }
+
 function goBackLevel() {
   if (level > 0) {
     level--;
@@ -188,7 +191,6 @@ function updateBackButton() {
 }
 
 function restartGame() {
-
   document.getElementById("endGame").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
   level = 0;
@@ -219,6 +221,9 @@ function showScreen(id) {
 }
 
 function startGame() {
-  showScreen("gameScreen");
+  updateBackButton();
+  setTitle();
+  setImageLevel();
   renderAnswersImage();
+  showScreen("gameScreen");
 }

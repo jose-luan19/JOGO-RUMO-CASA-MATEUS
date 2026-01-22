@@ -2,9 +2,9 @@ let confettiPieces = [];
 let feedbackTimer;
 let transitionLock = false;
 let level = 0;
+let confettiAnimationId = null;
 const imageCache = [];
 const colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
-const keys = {};
 const setTitle = () => {
   document.getElementById("levelTitle").innerText = levels[level].title;
 };
@@ -47,14 +47,9 @@ function createConfettiPiece() {
   };
 }
 
-function startConfetti() {
-  confettiPieces = Array.from({ length: 150 }, createConfettiPiece);
-  animateConfetti();
-}
-
 function animateConfetti() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  
   confettiPieces.forEach(p => {
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -62,18 +57,32 @@ function animateConfetti() {
     ctx.fillStyle = p.color;
     ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
     ctx.restore();
-
+    
     p.y += p.speed;
     p.rotation += p.speed;
-
+    
     if (p.y > canvas.height) {
       p.y = -10;
       p.x = Math.random() * canvas.width;
     }
   });
-
-  requestAnimationFrame(animateConfetti);
+  
+  confettiAnimationId = requestAnimationFrame(animateConfetti);
 }
+
+function startConfetti() {
+  confettiPieces = Array.from({ length: 150 }, createConfettiPiece);
+  animateConfetti();
+}
+
+function stopConfetti() {
+  if (confettiAnimationId) {
+    cancelAnimationFrame(confettiAnimationId);
+    confettiAnimationId = null;
+  }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 
 // ===== LEVELS =====
 const levels = [
@@ -122,8 +131,6 @@ function checkAnswer(btnSelected) {
       btnSelected.classList.remove("correctAnswer");
       updateBackButton();
 
-      for (let key in keys) keys[key] = false;
-
       if (level >= levels.length) {
         finishGame();
         return;
@@ -169,7 +176,6 @@ function goBackLevel() {
     setImageLevel();
   }
   document.getElementById("feedback").classList.add("hidden");
-  for (let key in keys) keys[key] = false;
   updateBackButton();
 }
 
@@ -191,9 +197,11 @@ function updateBackButton() {
 }
 
 function restartGame() {
+  stopConfetti();
   document.getElementById("endGame").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
   level = 0;
+  transitionLock = false;
   setTitle();
   setImageLevel();
   updateBackButton();

@@ -4,9 +4,9 @@ var confettiPieces = [];
 var feedbackTimer;
 var transitionLock = false;
 var level = 0;
+var confettiAnimationId = null;
 var imageCache = [];
 var colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
-var keys = {};
 
 var setTitle = function setTitle() {
   document.getElementById("levelTitle").innerText = levels[level].title;
@@ -49,13 +49,6 @@ function createConfettiPiece() {
   };
 }
 
-function startConfetti() {
-  confettiPieces = Array.from({
-    length: 150
-  }, createConfettiPiece);
-  animateConfetti();
-}
-
 function animateConfetti() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   confettiPieces.forEach(function (p) {
@@ -73,7 +66,23 @@ function animateConfetti() {
       p.x = Math.random() * canvas.width;
     }
   });
-  requestAnimationFrame(animateConfetti);
+  confettiAnimationId = requestAnimationFrame(animateConfetti);
+}
+
+function startConfetti() {
+  confettiPieces = Array.from({
+    length: 150
+  }, createConfettiPiece);
+  animateConfetti();
+}
+
+function stopConfetti() {
+  if (confettiAnimationId) {
+    cancelAnimationFrame(confettiAnimationId);
+    confettiAnimationId = null;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 } // ===== LEVELS =====
 
 
@@ -116,10 +125,6 @@ function checkAnswer(btnSelected) {
       level++;
       btnSelected.classList.remove("correctAnswer");
       updateBackButton();
-
-      for (var key in keys) {
-        keys[key] = false;
-      }
 
       if (level >= levels.length) {
         finishGame();
@@ -167,11 +172,6 @@ function goBackLevel() {
   }
 
   document.getElementById("feedback").classList.add("hidden");
-
-  for (var key in keys) {
-    keys[key] = false;
-  }
-
   updateBackButton();
 }
 
@@ -191,9 +191,11 @@ function updateBackButton() {
 }
 
 function restartGame() {
+  stopConfetti();
   document.getElementById("endGame").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
   level = 0;
+  transitionLock = false;
   setTitle();
   setImageLevel();
   updateBackButton();
